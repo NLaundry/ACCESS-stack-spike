@@ -8,6 +8,7 @@ from prisma.models import Post
 
 app = FastAPI()
 
+
 class ItemRequest(BaseModel):
     name: str
     description: Optional[str] = None
