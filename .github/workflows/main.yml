@@ -1,0 +1,35 @@
+name: Lint Format and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Install dependencies with Poetry
+      run: |
+        pip install poetry
+        poetry install
+    - name: Type check with pyright
+      run: |
+        poetry run pyright
+    - name: Lint and format with ruff
+      run: |
+        poetry run ruff --select E,F,UP,D,B,SIM,I,N,ASYNC,ICN,T20,PT,TRY,PERF,RUF --ignore F401,E501,W191,E111,E114,E117,D206,D300,Q000,Q001,Q002,Q003,COM812,COM819,ISC001,ISC002 --format
+    - name: Test with pytest
+      run: |
+        poetry run pytest
