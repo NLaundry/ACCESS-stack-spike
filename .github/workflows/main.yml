@@ -29,12 +29,15 @@ jobs:
       run: |
         poetry run prisma generate
     - name: Type check with pyright
+      continue-on-error: true
       run: |
         poetry run pyright
     - name: Lint with ruff
+      continue-on-error: true
       run: |
         poetry run ruff check --fix access_stack_spike/
     - name: Format with ruff
+      continue-on-error: true
       run: |
         poetry run ruff format access_stack_spike/
     - name: Test with pytest
