@@ -25,6 +25,9 @@ jobs:
         pipx install poetry
         pipx install ruff
         poetry install
+    - name: generate Prisma Types
+      run: |
+        poetry run prisma generate
     - name: Type check with pyright
       run: |
         poetry run pyright
