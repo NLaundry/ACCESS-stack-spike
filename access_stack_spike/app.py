@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import Body, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from prisma import Prisma
@@ -8,6 +9,14 @@ from prisma.models import Post
 
 app = FastAPI()
 
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 class ItemRequest(BaseModel):
     name: str
@@ -26,6 +35,22 @@ async def frank(post: Post) -> Post:
             "desc": "This is a description of the post.",
         }
     )
+    print(bob)
+    return bob
+
+
+@app.get("/bob")
+async def bob() -> Post:
+    db = Prisma()
+    await db.connect()
+    bob = await db.post.create(
+        {
+            "title": "My first post",
+            "published": False,
+            "desc": "This is a description of the post.",
+        }
+    )
+    print(bob)
     return bob
 
 
